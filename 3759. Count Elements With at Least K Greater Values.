@@ -1,0 +1,32 @@
+You are given an integer array nums of length n and an integer k.
+
+An element in nums is said to be qualified if there exist at least k elements in the array that are strictly greater than it.
+
+Return an integer denoting the total number of qualified elements in nums.
+Example 1:
+Input: nums = [3,1,2], k = 1
+Output: 2
+Explanation:
+The elements 1 and 2 each have at least k = 1 element greater than themselves.
+
+Code--
+class Solution {
+    public int countElements(int[] nums, int k) {
+        TreeMap<Integer,Integer> map = new TreeMap<>();
+        for(int num : nums) {map.put(num,map.getOrDefault(num,0) + 1);}
+        int freq[] = new int[map.size()];
+        int in = 0;
+        for(var v : map.entrySet()) {freq[in++] = v.getValue();}
+        int prefix[] = new int[freq.length];
+        prefix[0] = freq[0];
+        for(int i = 1;i < freq.length;i++) {
+            prefix[i] = prefix[i - 1] + freq[i];
+        }
+        int counter = 0,right = prefix.length - 1;
+        for(int i = 0;i < freq.length;i++) {
+            int len = prefix[right] - prefix[i];
+            if(len >= k) {counter += freq[i];}
+        }
+        return counter;
+    }
+}
