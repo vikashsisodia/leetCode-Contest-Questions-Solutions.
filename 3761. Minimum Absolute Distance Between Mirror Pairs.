@@ -1,0 +1,71 @@
+Example 1:
+Input: nums = [12,21,45,33,54]
+Output: 1
+Explanation:
+The mirror pairs are:
+(0, 1) since reverse(nums[0]) = reverse(12) = 21 = nums[1], giving an absolute distance abs(0 - 1) = 1.
+(2, 4) since reverse(nums[2]) = reverse(45) = 54 = nums[4], giving an absolute distance abs(2 - 4) = 2.
+The minimum absolute distance among all pairs is 1.
+
+Example 2:
+Input: nums = [120,21]
+Output: 1
+Explanation:
+There is only one mirror pair (0, 1) since reverse(nums[0]) = reverse(120) = 21 = nums[1].
+The minimum absolute distance is 1.
+
+Example 3:
+Input: nums = [21,120]
+Output: -1
+Explanation:
+There are no mirror pairs in the array.
+
+Code--
+
+class Solution {
+    public static int getReverse(int num) {
+        int reverse = 0;
+        for(;num != 0;num /= 10) {
+            int reminder = num % 10;
+            reverse = reverse * 10 + reminder;
+        }
+        return reverse;
+    }
+    public static int removeZeroes(int num) {
+        while(num % 10 == 0 && num != 0) {
+            num /= 10;
+        }
+        return num;
+    }
+    public int minMirrorPairDistance(int[] nums) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        int ans = Integer.MAX_VALUE;
+        for(int i = 0;i < nums.length;i++) {
+            int temp = nums[i];
+            if(map.containsKey(temp) && !(temp == getReverse(temp))) {
+                map.remove(temp);
+                map.put(temp,i);
+            }
+            if(Integer.toString(temp).endsWith("0")) {
+                int num = removeZeroes(temp);
+                map.put(num,i);
+                continue;
+            }
+            if(map.containsKey(getReverse(temp))) {
+                int key = map.get(getReverse(temp));
+                int diff = Math.abs(key - i);
+                ans = Math.min(ans,diff);
+                if(map.containsKey(temp)) {
+                    map.remove(temp);
+                    map.put(temp,i);
+                }else{
+                    map.put(temp,i);
+                }
+            }else{
+                map.put(temp,i);
+            }
+        }
+        if(ans == Integer.MAX_VALUE) {return -1;}
+        return ans;
+    }
+}
