@@ -1,0 +1,26 @@
+Example 1:
+Input: s = "abab"
+Output: 2
+Explanation:
+Split "abab" into "a" and "bab".
+Each substring starts with a distinct character i.e 'a' and 'b'. Thus, the answer is 2.
+
+Example 2:
+Input: s = "abcd"
+Output: 4
+Explanation:
+Split "abcd" into "a", "b", "c", and "d".
+Each substring starts with a distinct character. Thus, the answer is 4.
+
+Code--
+class Solution {
+    public int maxDistinct(String s) {
+        HashSet<Character> set = new HashSet<>();
+        int counter = 0;
+        for(char ch : s.toCharArray()) {
+            if(!set.contains(ch)) {counter++;}
+            set.add(ch);
+        }
+        return counter;
+    }
+}
